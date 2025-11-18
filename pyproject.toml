@@ -1,0 +1,20 @@
+[project]
+name = "sheet-music-creator"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "demucs>=4.0.1",
+    "fastapi>=0.121.2",
+    "librosa>=0.11.0",
+    "numpy>=2.3.5",
+    "python-multipart>=0.0.20",
+    "scipy>=1.16.3",
+    "soundfile>=0.13.1",
+    "torch>=2.9.1",
+    "torchaudio>=2.9.1",
+    "torchcrepe>=0.0.24",
+    "torchvision>=0.24.1",
+    "uvicorn>=0.38.0",
+]
