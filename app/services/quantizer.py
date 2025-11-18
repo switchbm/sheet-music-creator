@@ -3,7 +3,7 @@ Note quantization and segmentation module.
 Converts continuous pitch curves (Hz over time) into discrete musical events.
 """
 import numpy as np
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from scipy.ndimage import median_filter
 
 
@@ -108,7 +108,7 @@ class NoteQuantizer:
         self,
         pitch_curve: np.ndarray,
         times: np.ndarray,
-        min_duration: float = None
+        min_duration: Optional[float] = None
     ) -> List[Tuple[float, float, int]]:
         """
         Segment continuous pitch curve into discrete note events.
@@ -165,7 +165,7 @@ class NoteQuantizer:
 
         return notes
 
-    def quantize_time(self, time: float, bpm: float, resolution: int = None) -> float:
+    def quantize_time(self, time: float, bpm: float, resolution: Optional[int] = None) -> float:
         """
         Quantize time to the nearest grid position.
 

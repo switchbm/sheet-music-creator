@@ -5,7 +5,7 @@ import numpy as np
 import librosa
 import soundfile as sf
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Union
 
 
 class AudioLoader:
@@ -23,7 +23,7 @@ class AudioLoader:
 
     def load(
         self,
-        file_path: str,
+        file_path: Union[str, Path],
         sr: Optional[int] = None,
         mono: bool = True,
         duration: Optional[float] = None
@@ -46,9 +46,9 @@ class AudioLoader:
             FileNotFoundError: If the audio file doesn't exist
             librosa.exceptions.LibrosaError: If the file cannot be loaded
         """
-        file_path = Path(file_path)
-        if not file_path.exists():
-            raise FileNotFoundError(f"Audio file not found: {file_path}")
+        path = Path(file_path)
+        if not path.exists():
+            raise FileNotFoundError(f"Audio file not found: {path}")
 
         # Use target_sr if sr not specified
         if sr is None:
@@ -58,20 +58,20 @@ class AudioLoader:
             # Load audio file
             # librosa automatically resamples to the specified sr
             audio, sample_rate = librosa.load(
-                str(file_path),
+                str(path),
                 sr=sr,
                 mono=mono,
                 duration=duration
             )
 
-            return audio, sample_rate
+            return audio, int(sample_rate)
 
         except Exception as e:
-            raise Exception(f"Error loading audio file {file_path}: {str(e)}")
+            raise Exception(f"Error loading audio file {path}: {str(e)}")
 
     def load_stereo(
         self,
-        file_path: str,
+        file_path: Union[str, Path],
         sr: Optional[int] = None
     ) -> Tuple[np.ndarray, int]:
         """
@@ -91,7 +91,7 @@ class AudioLoader:
     def save(
         self,
         audio: np.ndarray,
-        file_path: str,
+        file_path: Union[str, Path],
         sr: int
     ) -> None:
         """
@@ -104,7 +104,7 @@ class AudioLoader:
         """
         sf.write(file_path, audio, sr)
 
-    def get_duration(self, file_path: str) -> float:
+    def get_duration(self, file_path: Union[str, Path]) -> float:
         """
         Get the duration of an audio file without loading it entirely.
 
@@ -118,7 +118,7 @@ class AudioLoader:
 
 
 # Convenience function for quick loading
-def load_audio(file_path: str, sr: int = 16000) -> Tuple[np.ndarray, int]:
+def load_audio(file_path: Union[str, Path], sr: int = 16000) -> Tuple[np.ndarray, int]:
     """
     Quick utility to load an audio file.
 

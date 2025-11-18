@@ -7,13 +7,12 @@ import uuid
 import os
 from pathlib import Path
 from typing import Optional
-import tempfile
 
 from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.models.schemas import TranscriptionResponse, ErrorResponse
+from app.models.schemas import TranscriptionResponse
 from app.services.engine import AudioProcessingEngine
 
 # Initialize FastAPI app
@@ -136,11 +135,18 @@ async def transcribe_audio(
             detail="Audio processing engine not initialized"
         )
 
+    # Validate filename is present
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="No filename provided"
+        )
+
     # Validate file type
     if not validate_audio_file(file.filename):
         raise HTTPException(
             status_code=400,
-            detail=f"Invalid file type. Allowed: MP3, WAV, FLAC, OGG, M4A, AAC"
+            detail="Invalid file type. Allowed: MP3, WAV, FLAC, OGG, M4A, AAC"
         )
 
     # Read file content

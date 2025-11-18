@@ -8,8 +8,6 @@ import torch
 import torchcrepe
 from pathlib import Path
 from typing import Tuple, Optional, Dict
-import tempfile
-import os
 
 from demucs.pretrained import get_model
 from demucs.apply import apply_model
@@ -33,7 +31,7 @@ class AudioProcessingEngine:
 
     def __init__(
         self,
-        device: str = None,
+        device: Optional[str] = None,
         demucs_model: str = "htdemucs",
         crepe_model: str = "full"
     ):
